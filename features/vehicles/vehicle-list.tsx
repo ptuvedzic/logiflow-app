@@ -1,0 +1,16 @@
+import { Truck } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Pagination, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TableCard } from "@/components/ui/table-card";
+import { TableScrollArea } from "@/components/ui/table-scroll-area";
+import { VehicleActions } from "@/features/vehicles/vehicle-actions";
+import type { VehicleListInput, VehicleListItem } from "@/lib/dal/vehicles";
+
+function vehicleUrl(filters: VehicleListInput, page: number) { const params = new URLSearchParams(); if (filters.search) params.set("search", filters.search); if (filters.status !== "all") params.set("status", filters.status); if (filters.type !== "all") params.set("type", filters.type); if (page > 1) params.set("page", String(page)); const query = params.toString(); return query ? `/operations/vehicles?${query}` : "/operations/vehicles"; }
+export function VehicleList({ vehicles, filters, totalCount, totalPages, role }: Readonly<{ vehicles: readonly VehicleListItem[]; filters: VehicleListInput; totalCount: number; totalPages: number; role: "admin" | "dispatcher" }>) {
+  const filtered = filters.search !== "" || filters.status !== "all" || filters.type !== "all";
+  if (!vehicles.length) return <EmptyState icon={Truck} title={filtered ? "No matching vehicles." : "No vehicles."} description={filtered ? "Change or clear the Vehicle filters." : "Vehicles will appear here after an Admin creates them."} />;
+  return <TableCard title="Vehicles" description={`${totalCount} ${totalCount === 1 ? "vehicle" : "vehicles"}`} footer={totalPages > 1 ? <Pagination><PaginationItem>{filters.page === 1 ? <PaginationPrevious disabled /> : <PaginationPrevious href={vehicleUrl(filters, filters.page - 1)} />}</PaginationItem>{Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => <PaginationItem key={page}><PaginationLink href={vehicleUrl(filters, page)} active={page === filters.page}>{page}</PaginationLink></PaginationItem>)}<PaginationItem>{filters.page === totalPages ? <PaginationNext disabled /> : <PaginationNext href={vehicleUrl(filters, filters.page + 1)} />}</PaginationItem></Pagination> : undefined}><TableScrollArea aria-label="Vehicles table"><Table><TableHeader><TableRow><TableHead>Registration</TableHead><TableHead>Vehicle</TableHead><TableHead>Type</TableHead><TableHead>Mileage</TableHead><TableHead>Status</TableHead><TableHead>Actions</TableHead></TableRow></TableHeader><TableBody>{vehicles.map((vehicle) => <TableRow key={vehicle.id}><TableCell className="font-medium">{vehicle.registration}</TableCell><TableCell>{vehicle.make} {vehicle.model}</TableCell><TableCell>{vehicle.vehicleType}</TableCell><TableCell>{vehicle.mileage.toLocaleString()} km</TableCell><TableCell><StatusBadge domain="vehicle" status={vehicle.status} /></TableCell><TableCell className="text-right">{role === "admin" ? <VehicleActions vehicle={vehicle} /> : "—"}</TableCell></TableRow>)}</TableBody></Table></TableScrollArea></TableCard>;
+}

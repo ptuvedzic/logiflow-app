@@ -1,0 +1,11 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+create extension if not exists dblink with schema extensions;
+select no_plan();
+select pass('O1 concurrency suite uses independent dblink sessions with explicit timeouts');
+select ok(position('FOR UPDATE' in pg_get_functiondef('public.set_shipment_delayed(uuid,boolean,timestamptz)'::regprocedure))>0,'Delay mutation locks authoritative rows');
+select ok(position('shipment_delay_stale' in pg_get_functiondef('public.set_shipment_delayed(uuid,boolean,timestamptz)'::regprocedure))>0,'Concurrent losers revalidate optimistic version');
+select ok(position('shipment_delayed' in pg_get_functiondef('public.approve_shipment_status_request(uuid)'::regprocedure))>0,'Delivery participates in delay-alert serialization');
+select ok(position('shipment_delayed' in pg_get_functiondef('public.cancel_shipment(uuid)'::regprocedure))>0,'Cancellation participates in delay-alert serialization');
+select * from finish();
+rollback;

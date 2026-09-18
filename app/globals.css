@@ -1,26 +1,172 @@
 @import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background-app: #f7f3ed;
+  --background-sidebar: #e9e5dd;
+  --background-card: #ffffff;
+  --background-hover: #f8f8f8;
+  --primary: #ff6209;
+  --primary-hover: #ff5c00;
+  --primary-active-background: rgba(255, 98, 9, 0.5);
+  --primary-icon: #ff6209;
+  --primary-soft: rgba(255, 98, 9, 0.15);
+  --primary-text-on-solid: #ffffff;
+  --analytics-purple: #8b5cf6;
+  --analytics-purple-soft: rgba(139, 92, 246, 0.15);
+  --text-primary: #111111;
+  --text-secondary: #454545;
+  --text-muted: #8f8f8f;
+  --text-placeholder: #b8b8b8;
+  --text-on-primary: #ffffff;
+  --text-danger: #ff0000;
+  --border-default: #ddd9d2;
+  --border-subtle: #e7e3dc;
+  --border-input: #cfcfcf;
+  --border-strong: #b8b8b8;
+  --success: #22c55e;
+  --success-soft: rgba(34, 197, 94, 0.15);
+  --success-border: #22c55e;
+  --warning: #c9eb05;
+  --warning-soft: rgba(201, 235, 5, 0.15);
+  --warning-border: #c9eb05;
+  --warning-text: #454545;
+  --danger: #eb0505;
+  --danger-soft: rgba(235, 5, 5, 0.15);
+  --danger-border: #eb0505;
+  --info: #3b82f6;
+  --info-soft: rgba(59, 130, 246, 0.15);
+  --info-border: #3b82f6;
+  --neutral: #8f8f8f;
+  --neutral-border: #b8b8b8;
+  --focus-ring-width: 2px;
+  --focus-ring-offset-width: 2px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-background-app: var(--background-app);
+  --color-background-sidebar: var(--background-sidebar);
+  --color-background-card: var(--background-card);
+  --color-background-hover: var(--background-hover);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active-background);
+  --color-primary-icon: var(--primary-icon);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-text-on-solid: var(--primary-text-on-solid);
+  --color-analytics-purple: var(--analytics-purple);
+  --color-analytics-purple-soft: var(--analytics-purple-soft);
+  --color-foreground: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-placeholder: var(--text-placeholder);
+  --color-on-primary: var(--text-on-primary);
+  --color-danger-alert: var(--text-danger);
+  --color-border: var(--border-default);
+  --color-border-subtle: var(--border-subtle);
+  --color-input: var(--border-input);
+  --color-border-strong: var(--border-strong);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-border: var(--success-border);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-border: var(--warning-border);
+  --color-warning-text: var(--warning-text);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-border: var(--danger-border);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-info-border: var(--info-border);
+  --color-neutral: var(--neutral);
+  --color-neutral-border: var(--neutral-border);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Segoe UI", sans-serif;
+
+  --text-h1: 40px;
+  --text-h1--line-height: 1.15;
+  --text-h1--font-weight: 500;
+  --text-h1--letter-spacing: 0.03em;
+  --text-h2: 24px;
+  --text-h2--line-height: 1.2;
+  --text-h2--font-weight: 500;
+  --text-h2--letter-spacing: 0.03em;
+  --text-h3: 18px;
+  --text-h3--line-height: 1.3;
+  --text-h3--font-weight: 500;
+  --text-h3--letter-spacing: 0.01em;
+  --text-body: 16px;
+  --text-body--line-height: 1.5;
+  --text-body--font-weight: 400;
+  --text-body-medium: 16px;
+  --text-body-medium--line-height: 1.5;
+  --text-body-medium--font-weight: 500;
+  --text-label: 14px;
+  --text-label--line-height: 1.3;
+  --text-label--font-weight: 500;
+  --text-label--letter-spacing: 0.03em;
+  --text-small: 14px;
+  --text-small--line-height: 1.4;
+  --text-small--font-weight: 400;
+  --text-small--letter-spacing: 0.03em;
+  --text-caption: 12px;
+  --text-caption--line-height: 1.4;
+  --text-caption--font-weight: 400;
+  --text-caption--letter-spacing: 0.02em;
+  --text-alert: 14px;
+  --text-alert--line-height: 1.4;
+  --text-alert--font-weight: 400;
+  --text-alert--letter-spacing: 0.03em;
+  --text-metric-large: 36px;
+  --text-metric-large--line-height: 1;
+  --text-metric-large--font-weight: 600;
+  --text-metric-medium: 28px;
+  --text-metric-medium--line-height: 1.1;
+  --text-metric-medium--font-weight: 600;
+
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+
+  --radius-card: 10px;
+  --radius-control: 10px;
+  --radius-tooltip: 8px;
+  --radius-overlay: 14px;
+  --radius-pill: 999px;
+  --radius-sheet: 16px 16px 0 0;
+
+  --transition-duration-interaction: 150ms;
+  --transition-duration-overlay: 200ms;
+  --ease-standard: ease-out;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--background-app);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Segoe UI", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

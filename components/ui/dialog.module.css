@@ -1,0 +1,66 @@
+.overlay[data-state="open"] {
+  animation: dialog-overlay-fade-in var(--transition-duration-overlay)
+    var(--ease-standard);
+}
+
+.overlay[data-state="closed"] {
+  animation: dialog-overlay-fade-out var(--transition-duration-overlay)
+    var(--ease-standard);
+}
+
+.content[data-state="open"] {
+  animation: dialog-content-enter var(--transition-duration-overlay)
+    var(--ease-standard);
+}
+
+.content[data-state="closed"] {
+  animation: dialog-content-exit var(--transition-duration-overlay)
+    var(--ease-standard);
+}
+
+@keyframes dialog-overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-overlay-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-content-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes dialog-content-exit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .content {
+    animation: none;
+  }
+}
