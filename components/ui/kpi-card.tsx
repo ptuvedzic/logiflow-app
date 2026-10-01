@@ -4,13 +4,13 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-type KpiTone = "primary" | "info" | "success" | "warning";
+type KpiTone = "primary" | "info" | "success" | "warning" | "analytics";
 
 export type KpiCardProps = Readonly<{
   label: string;
-  value: number;
+  value: string | number;
   supportingText: string;
-  href: string;
+  href?: string;
   icon: LucideIcon;
   tone: KpiTone;
 }>;
@@ -20,10 +20,27 @@ const toneClasses: Record<KpiTone, Readonly<{ container: string; icon: string }>
   info: { container: "bg-info-soft", icon: "text-info" },
   success: { container: "bg-success-soft", icon: "text-success" },
   warning: { container: "bg-warning-soft", icon: "text-warning-text" },
+  analytics: { container: "bg-analytics-purple-soft", icon: "text-analytics-purple" },
 };
 
 export function KpiCard({ label, value, supportingText, href, icon: Icon, tone }: KpiCardProps) {
   const classes = toneClasses[tone];
+  const content = (
+    <Card variant={href ? "hover" : "default"} className="h-full">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h2 className="text-label text-secondary">{label}</h2>
+          <p className="mt-2 break-words text-metric text-foreground">{value}</p>
+        </div>
+        <span className={cn("inline-flex size-10 shrink-0 items-center justify-center rounded-control", classes.container)}>
+          <Icon aria-hidden="true" className={classes.icon} size={20} strokeWidth={1.75} />
+        </span>
+      </div>
+      <p className="mt-2 break-words text-small text-secondary">{supportingText}</p>
+    </Card>
+  );
+
+  if (!href) return content;
 
   return (
     <Link
@@ -31,18 +48,7 @@ export function KpiCard({ label, value, supportingText, href, icon: Icon, tone }
       aria-label={`${label}: ${value}. ${supportingText}`}
       className="block rounded-card focus-visible:border-info focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info-soft focus-visible:ring-offset-2 focus-visible:ring-offset-background-app"
     >
-      <Card variant="hover" className="h-full">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h2 className="text-label text-secondary">{label}</h2>
-            <p className="mt-2 text-metric text-foreground">{value}</p>
-          </div>
-          <span className={cn("inline-flex size-10 shrink-0 items-center justify-center rounded-control", classes.container)}>
-            <Icon aria-hidden="true" className={classes.icon} size={20} strokeWidth={1.75} />
-          </span>
-        </div>
-        <p className="mt-2 break-words text-small text-secondary">{supportingText}</p>
-      </Card>
+      {content}
     </Link>
   );
 }

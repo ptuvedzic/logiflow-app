@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -1025,6 +1025,19 @@ export type Database = {
           tracking_number: string
         }[]
       }
+      create_shipment_expense: {
+        Args: {
+          input_amount: number
+          input_category: Database["public"]["Enums"]["expense_category"]
+          input_description?: string
+          input_expense_date: string
+          target_shipment_id: string
+        }
+        Returns: {
+          id: string
+          updated_at: string
+        }[]
+      }
       create_shipment_status_request: {
         Args: {
           requested_status: Database["public"]["Enums"]["shipment_status"]
@@ -1054,6 +1067,10 @@ export type Database = {
       document_type_allowed: {
         Args: { candidate: string; owner_kind: string }
         Returns: boolean
+      }
+      get_admin_reports: {
+        Args: { report_from: string; report_to: string }
+        Returns: Json
       }
       get_current_driver_status_request: {
         Args: never
@@ -1103,6 +1120,25 @@ export type Database = {
           vehicle_id: string
           vehicle_registration: string
           workshop: string
+        }[]
+      }
+      get_operations_shipment_financial_detail: {
+        Args: { target_shipment_id: string }
+        Returns: {
+          cargo_type: string
+          client_company: string
+          delayed: boolean
+          delivery_address: string
+          expected_delivery_at: string
+          expense_count: number
+          id: string
+          pickup_address: string
+          pickup_at: string
+          profit: number
+          revenue: number
+          shipment_status: Database["public"]["Enums"]["shipment_status"]
+          total_expenses: number
+          tracking_number: string
         }[]
       }
       get_operations_shipment_for_edit: {
@@ -1329,6 +1365,19 @@ export type Database = {
           vehicle_type: string
         }[]
       }
+      list_shipment_expenses: {
+        Args: { target_shipment_id: string }
+        Returns: {
+          amount: number
+          category: Database["public"]["Enums"]["expense_category"]
+          created_at: string
+          creator_name: string
+          description: string
+          expense_date: string
+          id: string
+          updated_at: string
+        }[]
+      }
       list_tracking_simulation_shipments: {
         Args: never
         Returns: {
@@ -1499,6 +1548,21 @@ export type Database = {
           id: string
           mutated: boolean
           tracking_number: string
+          updated_at: string
+        }[]
+      }
+      update_shipment_expense: {
+        Args: {
+          expected_updated_at: string
+          input_amount: number
+          input_category: Database["public"]["Enums"]["expense_category"]
+          input_description?: string
+          input_expense_date: string
+          target_expense_id: string
+          target_shipment_id: string
+        }
+        Returns: {
+          mutation_result: string
           updated_at: string
         }[]
       }

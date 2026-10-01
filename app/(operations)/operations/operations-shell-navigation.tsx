@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Activity, Bell, Building2, FileText, LayoutDashboard, Mail, Map, Package, TriangleAlert, Truck, UserRound, Users, Wrench } from "lucide-react";
+import { Activity, BarChart3, Bell, Building2, FileText, LayoutDashboard, Mail, Map, Package, TriangleAlert, Truck, UserRound, Users, Wrench } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -116,6 +116,13 @@ export function OperationsShellNavigation({ children, fullName, role, unreadNoti
           icon: Activity,
           active: pathname === "/operations/activity",
         },
+        ...(role === "admin" ? [{
+          id: "reports",
+          label: "Reports",
+          href: "/operations/reports",
+          icon: BarChart3,
+          active: pathname === "/operations/reports",
+        }] : []),
       ],
     },
   ] as const satisfies readonly SidebarSectionData[];
@@ -157,6 +164,8 @@ export function OperationsShellNavigation({ children, fullName, role, unreadNoti
               ? "Notifications"
             : pathname.startsWith("/operations/activity")
               ? "Activity"
+            : pathname.startsWith("/operations/reports")
+              ? "Reports"
             : "Dashboard",
     mobileNavigationTrigger: mobileNavigation,
     notification: (
