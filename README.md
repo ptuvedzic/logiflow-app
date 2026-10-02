@@ -1,5 +1,64 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Local V1 demo dataset
+
+SD1 uses Supabase's normal `supabase/seed.sql` reset hook for deterministic,
+Auth-independent fixture rows. A separate local-only script then provisions real
+password-authenticated users through Supabase Admin Auth and builds the remaining
+dataset through the application's existing workflow RPCs and private Storage
+flow.
+
+1. Start the local Supabase stack and reset it:
+
+   ```powershell
+   npx supabase start
+   npx supabase db reset --local
+   ```
+
+2. Supply a temporary demo-only password in the current shell and run the
+   bootstrap:
+
+   ```powershell
+   $env:LOGIFLOW_DEMO_PASSWORD = "choose-a-local-demo-password"
+   npm run demo:bootstrap
+   ```
+
+3. Start the application with `npm run dev` and sign in with any documented
+   demo username below using that same password. Re-run verification at any time
+   with `npm run demo:verify`.
+
+The bootstrap refuses non-local Supabase URLs, non-development rate-limit
+environments, and Auth domains that do not end in `.local`. It also refuses to
+merge fixtures into an already populated database; reset first instead. The
+password is never stored in the repository.
+
+| Role / state | Username |
+| --- | --- |
+| Active Admin | `demo.admin` |
+| Inactive Admin | `demo.admin.inactive` |
+| Dispatcher | `demo.dispatcher` |
+| Assigned Driver | `demo.driver.assigned` |
+| Loading Driver | `demo.driver.loading` |
+| In-transit Driver | `demo.driver.transit` |
+| Available Driver | `demo.driver.available` |
+| Off-duty Driver | `demo.driver.offduty` |
+| Inactive Driver | `demo.driver.inactive` |
+| Archived Driver | `demo.driver.archived` |
+
+`supabase db reset` intentionally restores only the deterministic foundation.
+Run `npm run demo:bootstrap` after every reset to recreate Auth identities and
+the workflow-driven operational fixtures.
+
+The pgTAP suite assumes empty operational tables. Run it against an unseeded
+reset, then restore the demo when finished:
+
+```powershell
+npx supabase db reset --local --no-seed
+npx supabase test db
+npx supabase db reset --local
+npm run demo:bootstrap
+```
+
 ## Getting Started
 
 First, run the development server:
